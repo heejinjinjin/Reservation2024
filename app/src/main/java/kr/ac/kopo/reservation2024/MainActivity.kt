@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.CalendarView
 import android.widget.Chronometer
+import android.widget.DatePicker
 import android.widget.RadioGroup
 import android.widget.RadioGroup.OnCheckedChangeListener
 import android.widget.TextView
@@ -15,10 +16,8 @@ import android.widget.TimePicker
 
 class MainActivity : AppCompatActivity() {
     lateinit var chrono : Chronometer
-    lateinit var btnStart : Button
-    lateinit var btnDone : Button
     lateinit var rg : RadioGroup
-    lateinit var calendar : CalendarView
+    lateinit var calendar : DatePicker
     lateinit var timePick : TimePicker
     lateinit var textResult : TextView
     var selectedYear : Int = 0
@@ -30,37 +29,41 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         chrono = findViewById<Chronometer>(R.id.chrono)
-        btnStart = findViewById<Button>(R.id.btnStart)
-        btnDone = findViewById<Button>(R.id.btnDone)
         rg = findViewById<RadioGroup>(R.id.rg)
-        calendar = findViewById<CalendarView>(R.id.calendar)
+        calendar = findViewById<DatePicker>(R.id.calendar)
         timePick = findViewById<TimePicker>(R.id.timePick)
         textResult = findViewById<TextView>(R.id.textResult)
 
+        rg.visibility = View.INVISIBLE
         calendar.visibility = View.INVISIBLE
         timePick.visibility = View.INVISIBLE
 
-        rg.setOnCheckedChangeListener(rgListener)
-
-        btnStart.setOnClickListener{
+        chrono.setOnClickListener{
             chrono.base = SystemClock.elapsedRealtime()
             chrono.start()
             chrono.setTextColor(Color.MAGENTA)
+            rg.visibility = View.VISIBLE
         }
 
-        btnDone.setOnClickListener {
+        rg.setOnCheckedChangeListener(rgListener)
+
+        textResult.setOnLongClickListener {
             chrono.stop()
             chrono.setTextColor(Color.CYAN)
+            selectedYear = calendar.year
+            selectedMonth = calendar.month
+            selectedDay = calendar.dayOfMonth
+
             textResult.setText("" + selectedYear + "년" +selectedMonth + "월" + selectedDay + "일")
             textResult.append("" + timePick.currentHour + "시")
             textResult.append("" + timePick.currentMinute + "분")
         }
         
-        calendar.setOnDateChangeListener { view, year, month, dayOfMonth ->
-            selectedYear = year
-            selectedMonth = month
-            selectedDay = dayOfMonth
-        }
+//        calendar.setOnDateChangeListener { view, year, month, dayOfMonth ->
+//            selectedYear = year
+//            selectedMonth = month
+//            selectedDay = dayOfMonth
+//        }
     }
 
     var rgListener = OnCheckedChangeListener {group, CheckedId ->
