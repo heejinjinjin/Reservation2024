@@ -54,9 +54,16 @@ class MainActivity : AppCompatActivity() {
             selectedMonth = calendar.month
             selectedDay = calendar.dayOfMonth
 
-            textResult.setText("" + selectedYear + "년" +selectedMonth + "월" + selectedDay + "일")
+            textResult.setText("" + selectedYear + "년" +(selectedMonth + 1) + "월" + selectedDay + "일")
             textResult.append("" + timePick.currentHour + "시")
             textResult.append("" + timePick.currentMinute + "분")
+            textResult.append(" 예약 완료됨")
+
+            rg.visibility = View.INVISIBLE
+            calendar.visibility = View.INVISIBLE
+            timePick.visibility = View.INVISIBLE
+
+            return@setOnLongClickListener true
         }
         
 //        calendar.setOnDateChangeListener { view, year, month, dayOfMonth ->
